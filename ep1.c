@@ -6,6 +6,7 @@ FILE *openSafe(char arquivo[]);
 float **pegaMatriz(FILE *arquivo, int n);
 float *pegaVetor(FILE *arquivo,int n);
 void multiploLinha(int n,int l , int x, int m, float **A);
+void trocaLinha(int n , int x, int m, float **A);
 /*-------------------------------------------*/
 
 int main( int argc, char** argv) {
@@ -91,13 +92,27 @@ float *pegaVetor(FILE *arquivo,int n) {
 }
 /*-------------------------------------------*/
 /* multiploLinha(int n, float **A):
-Recebe ponteiro apra uma matriz de tamanho n*n
+Recebe ponteiro para uma matriz de tamanho n*n
 e soma l * linha x na linha m 
 */
 void multiploLinha(int n,int l, int x,int m, float **A) {
    
    for (int w = 0; w < n; w++) {
       &A[m][w] = &A[m][w] + (l * (&A[x][w])); 
+   }
+}
+/*-------------------------------------------*/
+/* trocaLinha(int n, int x, int m, float **A):
+Recebe ponteiro para uma matriz de tamano n*n
+e troca as linhas x e m
+*/
+void trocaLinha(int n, int x, int m, float **A) {
+   float *aux;  
+   aux = malloc( n * sizeof (float));
+   for (i = 0; i < n; i++) {
+      aux[i]  = A[x][i] 
+      A[x][i] = A[m][i]
+      A[m][i] = aux[1]
    }
 }
 /*-------------------------------------------*/
