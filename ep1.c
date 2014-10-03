@@ -7,10 +7,10 @@
 /*-------------------------------------------*/
 FILE *openSafe(char arquivo[]);
 double modulo(double x);
-double **pegaMatriz(FILE *arquivo, int n);
-double *pegaVetor(FILE *arquivo,int n);
-void multiploLinha(int n,int l , int x, int m,   double **A);
-void trocaLinha(int n , int x, int m,   double **A);
+void pegaMatriz(FILE *arquivo, int n, double a[][nmax]);
+void pegaVetor(FILE *arquivo,int n, double intch[nmax]);
+void multiploLinha(int n,int l , int x, int m,    double A[][nmax]);
+void trocaLinha(int n , int x, int m,   double a[][nmax]);
 int lucol(double a[][nmax], int n, int intch[]);
 int lurow(double a[][nmax], int n, int intch[]);
 /*-------------------------------------------*/
@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
    FILE *arquivo;
    int n;
 
-   double **A; 
-   double *b;
+   double A[nmax][nmax]; 
+   double b[nmax];
 
 
    int i;
@@ -33,8 +33,8 @@ int main(int argc, char** argv) {
   
    arquivo = openSafe(argv[1]);
    fscanf(arquivo,"%d",&n);
-   A = pegaMatriz(arquivo, n);
-   b = pegaVetor(arquivo, n);
+   pegaMatriz(arquivo, n, A);
+   pegaVetor(arquivo, n, b);
 
   
    /*Imprime matriz Apenas teste*/
@@ -70,22 +70,14 @@ FILE *openSafe(char arquivo[]) {
 /*-------------------------------------------*/
 
 /* pegaMatriz(FILE *arquivo, int n):
-Recebe um ponteiro para FILE e devolve um ponteiro
-para uma matriz nxn tipo double
+Preenche a matriz
 */
-double **pegaMatriz(FILE *arquivo, int n) {
-   int x,y;
-   double **A;
-   A = malloc( n * sizeof (  double *));
-   int i;
-   for (i = 0; i < n; i++)
-      A[i] = malloc( n * sizeof (  double));
-   
-   for (i = 0; i < (n * n); i++){
-      fscanf(arquivo,"%d %d",&x,&y);
-      fscanf(arquivo,"%f",&A[x][y]);
+void pegaMatriz(FILE *arquivo, int n, double a[][nmax]) {
+   int i, j;
+   for (i = 0; i < n; i++){
+     for (j=0; j < n; j++)
+       fscanf(arquivo, "%lf", &a[i][j]);
    }
-   return A;
 }
 /*-------------------------------------------*/
 
@@ -93,26 +85,23 @@ double **pegaMatriz(FILE *arquivo, int n) {
 Recebe um ponteiro para tipo FILE e devolve
 um vetor do tipo   double
 */
-double *pegaVetor(FILE *arquivo,int n) {
-   double *b; 
-   int x,i;
-   b = malloc( n * sizeof (  double));
+void pegaVetor(FILE *arquivo, int n, double intch[]) {
+   int i;
    for (i = 0; i < n; i++) { 
-      fscanf(arquivo,"%d",&x);
-       fscanf(arquivo,"%f",&b[x]);
+      fscanf(arquivo,"%lf",&intch[i]);
    }
-   return b;
 }
 /*-------------------------------------------*/
-/* multiploLinha(int n,   double **A):
+/* 
+multiploLinha
 Recebe ponteiro para uma matriz de tamanho n*n
 e soma l * linha x na linha m 
 */
 
-void multiploLinha(int n,int l, int x,int m, double A[nmax][]) {
-   int w
-   for (int w = 0; w < n; w++) {
-      &A[m][w] = &A[m][w] + (l * (&A[x][w])); 
+void multiploLinha(int n,int l, int x,int m, double A[][nmax]) {
+   int w;
+   for (w = 0; w < n; w++) {
+      A[m][w] = A[m][w] + (l * (A[x][w])); 
 
    }
 }
@@ -124,19 +113,20 @@ double modulo(double x) {
     return x;
 }
 
-void trocaLinha(int n, int x, int m, double a[nmax][]) {
-   float aux;
+void trocaLinha(int n, int x, int m, double a[][nmax]) {
+   double aux;
+   int i;
    for (i = 0; i < n; i++) {
-      aux  = A[x][i] 
-      A[x][i] = A[m][i]
-      A[m][i] = aux
+     aux  = a[x][i] ;
+     a[x][i] = a[m][i];
+     a[m][i] = aux;
    }
 }
 
 
 int lucol(double a[][nmax], int n, int intch[])
 {
-   int i, j, k;
+  int i, j, k, maxk;
   for (k = 0; k < n; k++)
   {
     /*retorna índice do máximo*/
@@ -176,7 +166,7 @@ int lucol(double a[][nmax], int n, int intch[])
 
 int lurow(double a[][nmax], int n, int intch[])
 {
-   int i, j, k;
+  int i, j, k, maxk;
   for (k = 0; k < n; k++)
   {
     /*retorna índice do máximo*/
@@ -194,7 +184,7 @@ int lurow(double a[][nmax], int n, int intch[])
 
       if (maxk != k)
       {
-	       //trocar a linha a[k][] por a[maxk][]
+	   //trocar a linha a[k][] por a[maxk][]
     	   trocaLinha(n, k, maxk, a); 
       }
 
