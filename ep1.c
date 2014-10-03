@@ -13,6 +13,8 @@ void multiploLinha(int n,int l , int x, int m,    double A[][nmax]);
 void trocaLinha(int n , int x, int m,   double a[][nmax]);
 int lucol(double a[][nmax], int n, int intch[]);
 int lurow(double a[][nmax], int n, int intch[]);
+int sscol(int n, double A[][nmax], int p[], double b[]);
+int ssrow(int n, double A[][nmax], int p[], double b[]);
 /*-------------------------------------------*/
 /*
 Como usar: digite o nome do arquivo que tenha 
@@ -203,3 +205,30 @@ int lurow(double a[][nmax], int n, int intch[])
 
 }
 
+/*  Programa do livro pagina 100  */
+int sscol(int n, double A[][nmax], int p[], double b[]) {
+   int m,j,i;
+   for (k = 0; k < n - 1; k++){
+      m = p[k] 
+      trocaLinha(1,b[k],b[m],A);
+   }
+   for (j = 0; j < n - 1; j++) 
+      for (i = j + 1; i < n; i++)
+         b[i] = b[i] - A[i][j]*b[j]  
+   
+   for (j = n; j > 1; j--) {
+    if (A[j][j] == 0)
+      return -1;
+   
+    b[j] = b[j]/A[j][j]
+    for (i = 0;i < j -1;; i ++)
+      b[i] = b[i] - A[i][j]*b[j]
+   }
+
+}
+
+/* Na não sei se ta certo... */
+int ssrow(int n, double A[][nmax], int p[], double b[]) {
+
+
+}
