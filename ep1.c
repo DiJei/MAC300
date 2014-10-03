@@ -6,19 +6,12 @@
 /*#---Funcoes---#*/
 /*-------------------------------------------*/
 FILE *openSafe(char arquivo[]);
-<<<<<<< HEAD
-  double **pegaMatriz(FILE *arquivo, int n);
-  double *pegaVetor(FILE *arquivo,int n);
-void multiploLinha(int n,int l , int x, int m,   double **A);
-void trocaLinha(int n , int x, int m,   double **A);
-int lucol(int n, double A[][n], int p[]);
-=======
 float **pegaMatriz(FILE *arquivo, int n);
 float *pegaVetor(FILE *arquivo,int n);
 void multiploLinha(int n,int l , int x, int m, double a[nmax][]);
 void trocaLinha(int n , int x, int m, double a[nmax][]);
 int lurow(double a[][nmax], int n, int intch[]);
->>>>>>> 29ee620c00f790b118113a89deb241393bed941c
+
 /*-------------------------------------------*/
 /*
 Como usar: digite o nome do arquivo que tenha 
@@ -29,13 +22,8 @@ int main( int argc, char** argv) {
   
    FILE *arquivo;
    int n;
-<<<<<<< HEAD
-   double **A; 
-   double *b;
-=======
    float **A; //Corrigir depois. Usa memória fixa mesmo
    float *b;
->>>>>>> 29ee620c00f790b118113a89deb241393bed941c
    int i;
    int x,y;
   
