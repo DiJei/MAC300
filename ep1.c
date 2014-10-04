@@ -207,28 +207,65 @@ int lurow(double a[][nmax], int n, int intch[])
 
 /*  Programa do livro pagina 100  */
 int sscol(int n, double A[][nmax], int p[], double b[]) {
-   int m,j,i;
-   for (k = 0; k < n - 1; k++){
-      m = p[k] 
-      trocaLinha(1,b[k],b[m],A);
+   int k,j,i;
+   int aux;
+   for (k = 0; k < n; k++){
+      if (p[k] != k) /*troca a linha do vetor b*/
+      {
+        aux = b[k];
+	b[k] = b[p[k]];
+	b[p[k]] = aux;
+      }
    }
    for (j = 0; j < n - 1; j++) 
       for (i = j + 1; i < n; i++)
-         b[i] = b[i] - A[i][j]*b[j]  
+	b[i] = b[i] - A[i][j]*b[j];
    
    for (j = n; j > 1; j--) {
     if (A[j][j] == 0)
       return -1;
    
-    b[j] = b[j]/A[j][j]
-    for (i = 0;i < j -1;; i ++)
-      b[i] = b[i] - A[i][j]*b[j]
+    b[j] = b[j]/A[j][j];
+    for (i = 0;i < j -1; i ++)
+      b[i] = b[i] - A[i][j]*b[j];
    }
 
 }
 
-/* Na não sei se ta certo... */
-int ssrow(int n, double A[][nmax], int p[], double b[]) {
-
-
+/* Orientado a linha */
+int ssrow(int n, double A[][nmax], int p[], double b[]) 
+{
+  int m, j ,i;
+  int aux;
+  /*Acerta as mudanças de linha*/
+  for (i = 0; i < n; i++)
+  {
+    if (p[i] != i)
+    {
+      aux = b[i];
+      b[i] = b[p[i]];
+      b[p[i]] = aux;
+    }
+  }
+  /*Sistema triangular superior*/
+  for (i = n - 1; i > -1; i--)
+  {
+    for (j = n - 1; j > i; j--)
+    {
+      b[i] = b[i] - A[i][j]*b[j];
+    }
+    if (A[i][i] == 0)
+      return (-1); /*Singular...*/
+    b[i] = b[i]/A[i][i];
+  }
+  /*Sistema triangular inferior com diagonais = 1*/
+  for (j = 1; j < n; j++)
+  {
+    for (i = 0; i < j; i++)
+    {
+      b[j] = b[j] - A[i][j] * b[i];
+    }
+    /*Como a diagonal = 1, não precisa da segunda parte*/
+  }
+  return (0);
 }
