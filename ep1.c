@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
    
    
    /*Acha a decomposicao LU por coluna
-   e imprime
+     e imprime*/
    printf("Decomposicao LU coluna:\n");
    lucol(A,n,p);
    for(x = 0; x < n; x++) {
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
          printf("%f ",A[x][y]);
        printf("\n"); 
    }
-   /*Agora resolve por coluna e imprime
+   /*Agora resolve por coluna e imprime*/
    printf("Solucao Coluna: \n");
    sscol(n,A,p,b);
    for(x = 0; x < n; x++)
@@ -192,10 +192,10 @@ int lucol(double a[][nmax], int n, int intch[])
       if (a[k][k] == 0)
          return (-1);
 
-      for (i = k + 1; i < n; i++)
+      for (j = k + 1; j < n; j++)
       { 
-         a[i][k] = a[i][k] / a[k][k];
-         for (j = k + 1; j < n; j++)
+         a[j][k] = a[j][k] / a[k][k];
+         for (i = k + 1; i < n; i++)
             a[i][j] = a[i][j] - a[i][k] * a[k][j];
       }
       
@@ -250,7 +250,7 @@ int lurow(double a[][nmax], int n, int intch[])
 int sscol(int n, double A[][nmax], int p[], double b[]) {
    int k,j,i;
    int aux;
-   for (k = 0; k < (n - 1); k++){ /*ate (n-1)*/
+   for (k = 0; k < n; k++){
       if (p[k] != k) /*troca a linha do vetor b*/
       {
         aux = b[k];
@@ -262,12 +262,11 @@ int sscol(int n, double A[][nmax], int p[], double b[]) {
       for (i = j + 1; i < n; i++)
 	       b[i] = b[i] - A[i][j]*b[j];
    
-   for (j = n; j > -1; j--) {
+   for (j = n - 1; j != -1; j--) {
     if (A[j][j] == 0)
       return -1;
-   
     b[j] = b[j]/A[j][j];
-    for (i = 0;i < j -1; i ++)
+    for (i = 0; i < j - 1 ; i++)
       b[i] = b[i] - A[i][j]*b[j];
    }
 
