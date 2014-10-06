@@ -52,23 +52,6 @@ int main(int argc, char** argv) {
       printf("%f\n",b[x]);
    /*--------------------*/
    
-   
-   /*Acha a decomposicao LU por coluna
-     e imprime*/
-   printf("Decomposicao LU coluna:\n");
-   lucol(A,n,p);
-   for(x = 0; x < n; x++) {
-      for(y = 0; y < n; y ++)
-         printf("%f ",A[x][y]);
-       printf("\n"); 
-   }
-   /*Agora resolve por coluna e imprime*/
-   printf("Solucao Coluna: \n");
-   sscol(n,A,p,b);
-   for(x = 0; x < n; x++)
-      printf("%f\n",b[x]);
-
-    printf("\n");
 
    /*Acha a decomposicao LU por linha
    e imprime*/
@@ -84,6 +67,23 @@ int main(int argc, char** argv) {
    ssrow(n,A,p,b);
    for(x = 0; x < n; x++)
       printf("%f\n",b[x]);
+   
+   /*Acha a decomposicao LU por coluna
+     e imprime*/
+   printf("Decomposicao LU coluna:\n");
+   lucol(A,n,p);
+   for(x = 0; x < n; x++) {
+      for(y = 0; y < n; y ++)
+         printf("%f ",A[x][y]);
+       printf("\n"); 
+   }
+   /*Agora resolve por coluna e imprime
+   printf("Solucao Coluna: \n");*/
+   sscol(n,A,p,b);
+   for(x = 0; x < n; x++)
+      printf("%f\n",b[x]);
+
+    printf("\n");
 
 
    fclose(arquivo);
@@ -232,7 +232,7 @@ int lurow(double a[][nmax], int n, int intch[])
       }
 
       if (a[k][k] == 0)
-	       return (-1);
+	 return (-1);
 
       for (i = k + 1; i < n; i++) /*Calcula os multiplicadores*/
       {
@@ -247,7 +247,8 @@ int lurow(double a[][nmax], int n, int intch[])
 }
 
 /*  Programa do livro pagina 100  */
-int sscol(int n, double A[][nmax], int p[], double b[]) {
+int sscol(int n, double A[][nmax], int p[], double b[]) 
+{
    int k,j,i;
    int aux;
    for (k = 0; k < n; k++){
@@ -258,18 +259,24 @@ int sscol(int n, double A[][nmax], int p[], double b[]) {
 	b[p[k]] = aux;
       }
    }
-   for (j = 0; j < n - 1; j++) 
-      for (i = j + 1; i < n; i++)
-	       b[i] = b[i] - A[i][j]*b[j];
    
-   for (j = n - 1; j != -1; j--) {
-    if (A[j][j] == 0)
-      return -1;
-    b[j] = b[j]/A[j][j];
-    for (i = 0; i < j - 1 ; i++)
-      b[i] = b[i] - A[i][j]*b[j];
+   /*Parte triangular superior foda-c vou fazer ao contrario msm*/
+   for (i = n - 1; i >= 0; i--) 
+   {
+        for (j = i + 1; j < n; j++)
+             b[i] = b[i] - A[i][j] * b[j];
+	if (A[i][i] == 0)
+             return -1;      
+        b[i] = b[i] / A[i][i];
+
    }
 
+   /*Parte triangular inferior, I guess*/
+   for (i = 0; i < n; i++)
+   {
+       for (j = 0; j < i; j++)
+           b[i] = b[i] - A[i][j] * b[j];
+   }
 }
 
 /* Orientado a linha */
@@ -288,9 +295,9 @@ int ssrow(int n, double A[][nmax], int p[], double b[])
     }
   }
   /*Sistema triangular superior*/
-  for (i = n - 1; i > -1; i--)
+  for (i = n - 1; i >= 0; i--)
   {
-    for (j = n - 1; j > i; j--)
+    for (j = i + 1; j < n; j++)
     {
       b[i] = b[i] - A[i][j]*b[j];
     }
@@ -298,12 +305,13 @@ int ssrow(int n, double A[][nmax], int p[], double b[])
       return (-1); /*Singular...*/
     b[i] = b[i]/A[i][i];
   }
+
   /*Sistema triangular inferior com diagonais = 1*/
   for (j = 1; j < n; j++)
   {
     for (i = 0; i < j; i++)
     {
-      b[j] = b[j] - A[i][j] * b[i];
+      b[j] = b[j] - A[j][i] * b[i];
     }
     /*Como a diagonal = 1, não precisa da segunda parte*/
   }
